@@ -6,7 +6,7 @@ COMMANDS = {
   "add": ["add", "добавить", "добавь"],
   "list": ["list", "список"],
   "list_voice": ["say", "voice", "скажи"],
-  "delete": ["delete", "удали", "удалить"],
+  "delete": ["delete", "del", "уд", "удали", "удалить"],
   "help": ["help", "помощь", "commands", "команды"]
 }
 
