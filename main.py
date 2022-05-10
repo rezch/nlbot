@@ -108,10 +108,12 @@ MESSAGES_LIST = {
 
 def message_text(msg_type, message, args=None):
     language = UsersData.users[str(message.from_user.id)]["language"]
+    
     if args:
         text = MESSAGES_LIST[msg_type][language].format(*args)
     else:
         text = MESSAGES_LIST[msg_type][language]
+       
     return text
 
 
@@ -128,6 +130,7 @@ class BotFilesError(Exception):
 
 def set_language(user_id, lang):
     UsersData.users[str(user_id)]["language"] = lang
+    
     push_db()
 
 
@@ -135,7 +138,9 @@ def push_db():
     try:
         with open('data.json', 'r+') as f:
             db = json.load(f)
+            
             db['users'] = UsersData.users
+            
             f.seek(0)
             json.dump(db, f)
             f.truncate()
@@ -147,6 +152,7 @@ def push_db():
 def push_db_user(message):
     try:
         push_db()
+        
         bot.send_message(
             chat_id=message.chat.id,
             text=message_text("done", message)
@@ -176,19 +182,23 @@ class UsersData:
         try:
             with open('data.json', 'r') as f:
                 UsersData.users = json.load(f)['users']
+                
                 UsersData.users_id = list(UsersData.users.keys())
         except FileNotFoundError:
             raise DBError()
 
     def __init__(self, user_id, name, language):
         user_id = str(user_id)
+        
         if user_id not in UsersData.users_id:
             self.user = {
                 "name": str(name),
                 "language": language,
                 "data_list": []
             }
+            
             UsersData.users_id.append(user_id)
+            
             UsersData.users[user_id] = self.user
 
 
