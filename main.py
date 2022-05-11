@@ -320,8 +320,7 @@ def send_hello(message):
 def start_command(message):
     log(message)
 
-    language = message.from_user.language_code
-    language = language if language in LANGUAGES else "EN"
+    language = message.from_user.language_code if language in LANGUAGES else "EN"
 
     username = message.from_user.username
 
