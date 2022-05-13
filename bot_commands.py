@@ -4,7 +4,7 @@ from os import remove
 from TxtToMp3 import Mp3Convert
 
 from messages_list import LANGUAGES, COMMANDS, MESSAGES_LIST
-from user import *
+from main import *
 
 """
     TODO:
