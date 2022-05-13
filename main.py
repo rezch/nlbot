@@ -6,6 +6,14 @@ from TxtToMp3 import Mp3Convert
 from messages_list import LANGUAGES, COMMANDS, MESSAGES_LIST
 
 
+"""
+    TODO:
+    1) delete command range input
+    2) commands args in the line
+    3) notification command
+"""
+
+
 token = '5320394418:AAECLQlJyDMVPTHAljjMbG3AmrOpwQ0TQVA'
 
 bot = telebot.TeleBot(token=token, parse_mode=None)
