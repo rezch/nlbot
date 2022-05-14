@@ -1,6 +1,6 @@
 import json
 
-from messages_list import MESSAGES_LIST
+from bot.messages_list import MESSAGES_LIST
 
 def message_text(msg_type, message, args=None):
     language = UsersData.users[str(message.from_user.id)]["language"]
@@ -104,6 +104,3 @@ def log(message):
     print(message.text)
     print("<-------------------->")
 
-
-if __name__ == "__main__":
-    start()
