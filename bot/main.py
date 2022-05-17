@@ -1,10 +1,10 @@
 import telebot
 
 from os import remove
-from bot.TxtToMp3 import Mp3Convert
+from TxtToMp3 import Mp3Convert
 
-from bot.messages_list import LANGUAGES, COMMANDS, MESSAGES_LIST
-from bot.db_operator import *
+from messages_list import LANGUAGES, COMMANDS, LANGUAGES_NAMES, LANGUAGES_VARIATIONS
+from db_operator import *
 
 """
     TODO:
@@ -30,7 +30,7 @@ def help_command(message):
 
     bot.send_message(
         chat_id=message.chat.id,
-        text=message_text("help", message)
+        text=message_text("help", message.from_user.id)
     )
 
 
@@ -49,7 +49,7 @@ def list_voice_command(message):
     if len(user_data_list) == 0:
         bot.send_message(
             chat_id=message.chat.id,
-            text=message_text("list_is_empty", message)
+            text=message_text("list_is_empty", message.from_user.id)
         )
     else:
         text = ""
@@ -84,12 +84,12 @@ def delete_command(message):
     if len(user_data_list) == 0:
         bot.send_message(
             chat_id=message.chat.id,
-            text=message_text("list_is_empty", message)
+            text=message_text("list_is_empty", message.from_user.id)
         )
     else:
         echo = bot.send_message(
             chat_id=message.chat.id,
-            text=message_text("delete", message)
+            text=message_text("delete", message.from_user.id)
         )
         bot.register_next_step_handler(message=echo, callback=delete_command_echo)
 
@@ -104,7 +104,7 @@ def delete_command_echo(message):
     if text == "*":
         echo = bot.send_message(
             chat_id=message.chat.id,
-            text=message_text("accept", message)
+            text=message_text("accept", message.from_user.id)
         )
 
         bot.register_next_step_handler(message=echo, callback=accept_delete_command)
@@ -115,7 +115,7 @@ def delete_command_echo(message):
             if max(text) > len(user_data_list) or min(text) < 1:
                 bot.send_message(
                     chat_id=message.chat.id,
-                    text=message_text("delete_number_exc", message, [1, len(user_data_list)])
+                    text=message_text("delete_number_exc", message.from_user.id, [1, len(user_data_list)])
                 )
             else:
                 for i in text:
@@ -130,7 +130,7 @@ def delete_command_echo(message):
         except TypeError:
             bot.send_message(
                 chat_id=message.chat.id,
-                text=message_text("input_exc", message)
+                text=message_text("input_exc", message.from_user.id)
             )
     
 
@@ -148,7 +148,7 @@ def accept_delete_command(message):
     else:
         bot.send_message(
             chat_id=message.chat.id,
-            text=message_text("unaccept", message)
+            text=message_text("unaccept", message.from_user.id)
         )
 
 
@@ -158,7 +158,7 @@ def add_command(message):
 
     echo = bot.send_message(
         chat_id=message.chat.id, 
-        text=message_text('add', message)
+        text=message_text('add', message.from_user.id)
     )
     bot.register_next_step_handler(message=echo, callback=echo_add_command)
 
@@ -169,7 +169,7 @@ def echo_add_command(message):
     if len(text) >= TEXT_SIZE:
         bot.send_message(
             chat_id=message.chat.id, 
-            text=message_text("add_text_exc", message, [len(text)])
+            text=message_text("add_text_exc", message.from_user.id, [len(text)])
         )
         return
 
@@ -178,7 +178,7 @@ def echo_add_command(message):
     if len(user_data_list) >= LIST_SIZE:
         bot.send_message(
             chat_id=message.chat.id,
-             text=message_text("add_size_exc", message, [len(user_data_list)])
+             text=message_text("add_size_exc", message.from_user.id, [len(user_data_list)])
         )
     else:
         user_data_list.append(text)
@@ -194,12 +194,12 @@ def get_list_command(message):
     
     user_data_list = UsersData.users[str(message.from_user.id)]['data_list']
 
-    text = message_text("list", message, user_data_list)
+    text = message_text("list", message.from_user.id, user_data_list)
 
     if len(user_data_list) == 0:
         bot.send_message(
             chat_id=message.chat.id,
-            text=message_text("list_is_empty", message)
+            text=message_text("list_is_empty", message.from_user.id)
         )
     else:
         for i, value in enumerate(user_data_list):
@@ -217,7 +217,7 @@ def send_hello(message):
 
     bot.reply_to(
         message,
-        message_text('hello', message, [message.from_user.username])
+        message_text('hello', message.from_user.id, [message.from_user.username])
     )
 
 
@@ -234,7 +234,7 @@ def start_command(message):
 
     bot.reply_to(
         message, 
-        text=message_text("start", message, username)
+        text=message_text("start", message.from_user.id, username)
     )
 
 
@@ -244,7 +244,7 @@ def language_command(message):
 
     echo = bot.send_message(
         chat_id=message.chat.id, 
-        text=message_text("language_choose", message, LANGUAGES)
+        text=message_text("language_choose", message.from_user.id, LANGUAGES_NAMES)
     )
     bot.register_next_step_handler(message=echo, callback=echo_set_language)
 
@@ -252,12 +252,15 @@ def language_command(message):
 def echo_set_language(message):
     text = str(message.text).lower()
 
-    for lang in UsersData.languages:
-        for option in UsersData.languages[lang]:
+    for lang in LANGUAGES_VARIATIONS:
+        for option in LANGUAGES_VARIATIONS[lang]:
             if option == text:
                 set_language(message.from_user.id, lang)
 
-                return bot.send_message(chat_id=message.chat.id, text=message_text("language_set", message))
+                return bot.send_message(
+                                    chat_id=message.chat.id, 
+                                    text=message_text("language_set", message.from_user.id)
+                                    )
         
     bot.send_message(
         chat_id=message.chat.id, 

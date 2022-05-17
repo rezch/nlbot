@@ -1,9 +1,11 @@
 import json
 
-from bot.messages_list import MESSAGES_LIST
+from messages_list import MESSAGES_LIST
 
-def message_text(msg_type, message, args=None):
-    language = UsersData.users[str(message.from_user.id)]["language"]
+DB_DIRECTORY = 'C:/Users/Daniil/nlbot/bot/db/data.json'
+
+def message_text(msg_type, user_id, args=None):
+    language = UsersData.users[str(user_id)]["language"]
     
     if args:
         text = MESSAGES_LIST[msg_type][language].format(*args)
@@ -32,7 +34,7 @@ def set_language(user_id, lang):
 
 def push_db():
     try:
-        with open('data.json', 'r+') as f:
+        with open(DB_DIRECTORY, 'r+') as f:
             db = json.load(f)
             
             db['users'] = UsersData.users
@@ -64,31 +66,20 @@ class UsersData:
     users = {}
     users_id = []
 
-    languages_list = [
-        'Русский ', 'English '
-    ]
-
-    languages = {
-        'en': ['en', 'english', 'eng'],
-        'ru': ['ru', 'rus', 'russian', 'рус', 'русский']
-    }
-
     @staticmethod
     def db_init():
         try:
-            with open('data.json', 'r') as f:
+            with open(DB_DIRECTORY, 'r') as f:
                 UsersData.users = json.load(f)['users']
-                
                 UsersData.users_id = list(UsersData.users.keys())
         except FileNotFoundError:
             raise DBError()
 
-    def __init__(self, user_id, name, language):
-        user_id = str(user_id)
+    def __init__(self, user_id: str, name: str, language: str):
         
         if user_id not in UsersData.users_id:
             self.user = {
-                "name": str(name),
+                "name": name,
                 "language": language,
                 "data_list": []
             }

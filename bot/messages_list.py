@@ -1,5 +1,13 @@
 LANGUAGES = ["en", "ru"]
 
+LANGUAGES_NAMES = [
+    'Русский ', 'English '
+]
+
+LANGUAGES_VARIATIONS = {
+    'en': ['en', 'english', 'eng'],
+    'ru': ['ru', 'rus', 'russian', 'рус', 'русский']
+}
 
 COMMANDS = {
   "hello": ["hello", "привет"],
