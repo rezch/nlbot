@@ -1,10 +1,10 @@
 import telebot
 
 from os import remove
-from bot.TxtToMp3 import Mp3Convert
+from TxtToMp3 import Mp3Convert
 
-from bot.messages_list import LANGUAGES, COMMANDS, MESSAGES_LIST
-from bot.db_operator import *
+from messages_list import LANGUAGES, COMMANDS, MESSAGES_LIST
+from db_operator import *
 
 """
     TODO:
