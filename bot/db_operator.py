@@ -1,6 +1,6 @@
 import json
 
-from bot.messages_list import MESSAGES_LIST
+from messages_list import MESSAGES_LIST
 
 def message_text(msg_type, message, args=None):
     language = UsersData.users[str(message.from_user.id)]["language"]
