@@ -2,6 +2,10 @@ import json
 
 from messages_list import MESSAGES_LIST
 
+
+DB_PATH = "/db/data.json"
+
+
 def message_text(msg_type, message, args=None):
     language = UsersData.users[str(message.from_user.id)]["language"]
     
@@ -32,7 +36,7 @@ def set_language(user_id, lang):
 
 def push_db():
     try:
-        with open('data.json', 'r+') as f:
+        with open(DB_PATH, 'r+') as f:
             db = json.load(f)
             
             db['users'] = UsersData.users
@@ -76,7 +80,7 @@ class UsersData:
     @staticmethod
     def db_init():
         try:
-            with open('data.json', 'r') as f:
+            with open(DB_PATH, 'r') as f:
                 UsersData.users = json.load(f)['users']
                 
                 UsersData.users_id = list(UsersData.users.keys())
