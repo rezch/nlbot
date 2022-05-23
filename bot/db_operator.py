@@ -3,7 +3,7 @@ import json
 from messages_list import MESSAGES_LIST
 
 
-DB_PATH = "/db/data.json"
+DB_PATH = "db/data.json"
 
 
 def message_text(msg_type, message, args=None):
