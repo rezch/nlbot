@@ -14,7 +14,7 @@ from messages_list import LANGUAGES, COMMANDS, MESSAGES_LIST
 """
 
 
-token = '5320394418:AAECLQlJyDMVPTHAljjMbG3AmrOpwQ0TQVA'
+token = '***token***'
 
 bot = telebot.TeleBot(token=token, parse_mode=None)
 
